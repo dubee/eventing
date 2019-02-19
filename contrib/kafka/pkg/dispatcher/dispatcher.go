@@ -64,6 +64,12 @@ type saramaCluster struct {
 func (c *saramaCluster) NewConsumer(groupID string, topics []string) (KafkaConsumer, error) {
 	consumerConfig := cluster.NewConfig()
 	consumerConfig.Version = sarama.V1_1_0_0
+    consumerConfig.Net.SASL.Enable = true
+    consumerConfig.Net.SASL.User = "K1jzCQSVE6u54zUs"
+    consumerConfig.Net.SASL.Password = "59X5zdlx4x1MP0BI1PDT6EPD5uylvphe"
+    consumerConfig.Net.TLS.Enable = true
+
+
 	return cluster.NewConsumer(c.kafkaBrokers, groupID, topics, consumerConfig)
 }
 
@@ -229,6 +235,11 @@ func NewDispatcher(brokers []string, logger *zap.Logger) (*KafkaDispatcher, erro
 	conf := sarama.NewConfig()
 	conf.Version = sarama.V1_1_0_0
 	conf.ClientID = controller.Name + "-dispatcher"
+    conf.Net.SASL.Enable = true
+    conf.Net.SASL.User = "K1jzCQSVE6u54zUs"
+    conf.Net.SASL.Password = "59X5zdlx4x1MP0BI1PDT6EPD5uylvphe"
+    conf.Net.TLS.Enable = true
+
 	client, err := sarama.NewClient(brokers, conf)
 	if err != nil {
 		return nil, fmt.Errorf("unable to create kafka client: %v", err)

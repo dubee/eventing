@@ -95,11 +95,18 @@ func getProvisionerConfig() (*provisionerController.KafkaProvisionerConfig, erro
 	config := &provisionerController.KafkaProvisionerConfig{}
 
 	if value, ok := configMap[BrokerConfigMapKey]; ok {
+
 		bootstrapServers := strings.Split(value, ",")
 		if len(bootstrapServers) != 0 {
 			config.Brokers = bootstrapServers
+			//config.SASL.User = "K1jzCQSVE6u54zUs"
+			//config.SASL.Password = "59X5zdlx4x1MP0BI1PDT6EPD5uylvphe"
+			//config.SASL.Enabled = true
 			return config, nil
 		}
+
+		logger.Info("Config ", zap.Any("config", config))
+
 	}
 
 	return nil, fmt.Errorf("missing key %s in provisioner configuration", BrokerConfigMapKey)

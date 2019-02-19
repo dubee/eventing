@@ -128,6 +128,9 @@ func (r *reconciler) reconcile(ctx context.Context, channel *eventingv1alpha1.Ch
 	// This is because of an issue with Shopify/sarama. See https://github.com/Shopify/sarama/issues/1162.
 	// Once the issue is fixed we should use a shared cluster admin client. Also, r.kafkaClusterAdmin is currently
 	// used to pass a fake admin client in the tests.
+
+    r.logger.Info("CREATING KAFKA ADMIN CLIENT!!!!!!!!!!!!!!!")
+
 	kafkaClusterAdmin := r.kafkaClusterAdmin
 	if kafkaClusterAdmin == nil {
 		var err error
@@ -366,7 +369,12 @@ func createKafkaAdminClient(config *controller.KafkaProvisionerConfig) (sarama.C
 	saramaConf := sarama.NewConfig()
 	saramaConf.Version = sarama.V1_1_0_0
 	saramaConf.ClientID = controllerAgentName
-	return sarama.NewClusterAdmin(config.Brokers, saramaConf)
+	saramaConf.Net.SASL.Enable = true
+    saramaConf.Net.SASL.User = "K1jzCQSVE6u54zUs"
+    saramaConf.Net.SASL.Password = "59X5zdlx4x1MP0BI1PDT6EPD5uylvphe"
+    saramaConf.Net.TLS.Enable = true
+
+	return sarama.NewClusterAdmin(config.Brokers, saramaConf) // Need to pass in creds
 }
 
 // unmarshalArguments unmarshal's a json/yaml serialized input and returns channelArgs
